@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 gtk = { version = "0.9.6", package = "gtk4", features=["v4_16"]}
+rusqlite = { version = "0.34.0", features = ["bundled"] }
