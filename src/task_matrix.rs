@@ -30,23 +30,35 @@ impl From<Vec<Task>> for Matrix {
 #[derive(Debug)]
 pub struct Task {
     content: String,
-    completed: bool,
+    complete: bool,
     importance: Importance,
     urgency: Urgency,
 }
 
-impl<'a> Task {
+impl Task {
+    pub fn new(content: String, importance: Importance, urgency: Urgency) -> Task {
+        Task {
+            content,
+            complete: true,
+            importance,
+            urgency
+        }
+    }
     fn cmp_importance(&self, other: &Task) -> std::cmp::Ordering {
         self.importance.cmp(&other.importance)
     }
-
     fn cmp_urgency(&self, other: &Task) -> std::cmp::Ordering {
         self.urgency.cmp(&other.urgency)
     }
-    fn content(&self) -> &str {
+    pub fn content(&self) -> &str {
         &self.content
     }
-
+    pub fn is_complete(&self) -> bool {
+        self.complete
+    }
+    pub fn toggle_complete(&mut self) {
+        self.complete = !self.complete
+    }
 }
 
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
