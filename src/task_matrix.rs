@@ -1,10 +1,19 @@
 pub struct Matrix {
-    tasks: Vec<Vec<Option<Task>>>
+    tasks: Vec<Task>
 }
-impl Matrix {
-    // pub fn empty() -> Matrix {
-    //     Matrix { tasks: vec![vec![None; 5]; 5] }
-    // }
+impl <'a> Matrix {
+    pub fn empty() -> Matrix {
+        Matrix { tasks: Vec::new() }
+    }
+    pub fn get_tasks(&'a self) -> &'a Vec<Task> {
+        &self.tasks
+    }
+    pub fn sort_by_importance(&mut self) {
+        self.tasks.sort_by(|a, b| a.cmp_importance(b));
+    }
+    pub fn sort_by_urgency(&mut self) {
+        self.tasks.sort_by(|a, b| a.cmp_urgency(b));
+    }
 }
 #[derive(Debug)]
 pub struct Task {
@@ -17,6 +26,10 @@ pub struct Task {
 impl Task {
     pub fn cmp_importance(&self, other: &Task) -> std::cmp::Ordering {
         self.importance.cmp(&other.importance)
+    }
+
+    pub fn cmp_urgency(&self, other: &Task) -> std::cmp::Ordering {
+        self.urgency.cmp(&other.urgency)
     }
 
     pub fn _test() {
