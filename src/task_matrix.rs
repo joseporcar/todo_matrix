@@ -1,7 +1,7 @@
 pub struct Matrix {
     tasks: Vec<Task>
 }
-impl <'a> Matrix {
+impl Matrix {
     pub fn empty() -> Matrix {
         Matrix { tasks: Vec::new() }
     }
@@ -10,6 +10,9 @@ impl <'a> Matrix {
     }
     pub fn task(&self, index:usize) -> &Task {
         &self.tasks[index]
+    }
+    pub fn add_task(&mut self, task: Task) {
+        self.tasks.push(task);
     }
     pub fn sort_by_importance(&mut self) {
         self.tasks.sort_by(|a, b| a.cmp_importance(b));
@@ -32,7 +35,7 @@ pub struct Task {
     urgency: Urgency,
 }
 
-impl Task {
+impl<'a> Task {
     fn cmp_importance(&self, other: &Task) -> std::cmp::Ordering {
         self.importance.cmp(&other.importance)
     }
@@ -40,6 +43,10 @@ impl Task {
     fn cmp_urgency(&self, other: &Task) -> std::cmp::Ordering {
         self.urgency.cmp(&other.urgency)
     }
+    fn content(&self) -> &str {
+        &self.content
+    }
+
 }
 
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
