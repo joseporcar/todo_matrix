@@ -15,13 +15,21 @@ pub struct Task {
 }
 
 impl Task {
+    pub fn cmp_importance(&self, other: &Task) -> std::cmp::Ordering {
+        self.importance.cmp(&other.importance)
+    }
 
+    pub fn _test() {
+        let task1 = Task { content: "h".to_owned(), completed: true, importance: Importance::High, urgency: Urgency::High};
+        let task2 = Task { content: "h".to_owned(), completed: true, importance: Importance::MidLow, urgency: Urgency::High};
+        println!("{:?}", task1.cmp_importance(&task2))
+    }
 }
 
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
 enum Importance {
     Low,
-    MidLo,
+    MidLow,
     Mid,
     MidHigh,
     High
@@ -30,7 +38,7 @@ enum Importance {
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
 enum Urgency {
     Low,
-    MidLo,
+    MidLow,
     Mid,
     MidHigh,
     High
