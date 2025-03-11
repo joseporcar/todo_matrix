@@ -1,9 +1,14 @@
+use chrono::{NaiveDate, Utc};
 pub struct Matrix {
+    date: NaiveDate,
     tasks: Vec<Task>
 }
 impl Matrix {
     pub fn empty() -> Matrix {
-        Matrix { tasks: Vec::new() }
+        Matrix { date:Utc::now().date_naive(), tasks: Vec::new() }
+    }
+    pub fn date(&self) -> String {
+        self.date.to_string()
     }
     pub fn tasks(&self) -> &Vec<Task> {
         &self.tasks
@@ -20,17 +25,18 @@ impl Matrix {
     pub fn sort_by_urgency(&mut self) {
         self.tasks.sort_by(|a, b| a.cmp_urgency(b));
     }
+
 }
 
-impl From<Vec<Task>> for Matrix {
-    fn from(value: Vec<Task>) -> Self {
-        Matrix { tasks: value}
+impl From<&[Task]> for Matrix {
+    fn from(value: &[Task]) -> Self {
+        Matrix { date:Utc::now().date_naive(), tasks: value.to_vec()}
     }
 }
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Task {
     content: String,
-    complete: bool,
+    complete: Completeness,
     importance: Importance,
     urgency: Urgency,
 }
@@ -39,7 +45,7 @@ impl Task {
     pub fn new(content: String, importance: Importance, urgency: Urgency) -> Task {
         Task {
             content,
-            complete: true,
+            complete: Completeness::None,
             importance,
             urgency
         }
@@ -53,15 +59,15 @@ impl Task {
     pub fn content(&self) -> &str {
         &self.content
     }
-    pub fn is_complete(&self) -> bool {
-        self.complete
+    pub fn completeness(&self) -> &Completeness {
+        &self.complete
     }
-    pub fn toggle_complete(&mut self) {
-        self.complete = !self.complete
+    pub fn set_completeness(&mut self, completeness: Completeness) {
+        self.complete = completeness
     }
 }
 
-#[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
+#[derive(Debug, PartialEq, PartialOrd, Eq, Ord, Clone)]
 pub enum Importance {
     Low,
     MidLow,
@@ -70,11 +76,19 @@ pub enum Importance {
     High
 }
 
-#[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
+#[derive(Debug, PartialEq, PartialOrd, Eq, Ord, Clone)]
 pub enum Urgency {
     Low,
     MidLow,
     Mid,
     MidHigh,
     High
+}
+
+#[derive(Debug, PartialEq, PartialOrd, Eq, Ord, Clone)]
+pub enum Completeness {
+    None,
+    Started,
+    Almost, 
+    Complete
 }
