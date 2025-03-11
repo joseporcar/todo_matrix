@@ -1,15 +1,15 @@
 
 use chrono::{NaiveDate, Utc};
 pub struct Matrix {
-    date: NaiveDate,
+    dates: Vec<NaiveDate>,
     tasks: Vec<Task>
 }
 impl Matrix {
-    pub fn new() -> Matrix {
-        Matrix { date:Utc::now().date_naive(), tasks: Vec::new() }
+    pub fn default() -> Matrix {
+        Matrix { dates:vec![Utc::now().date_naive()], tasks: Vec::new() }
     }
-    pub fn date(&self) -> String {
-        self.date.to_string()
+    pub fn dates(&self) -> &Vec<NaiveDate> {
+        &self.dates
     }
     pub fn tasks(&self) -> &Vec<Task> {
         &self.tasks
@@ -29,20 +29,21 @@ impl Matrix {
 
 }
 
-impl FromIterator<Task> for Matrix {
-    fn from_iter<T: IntoIterator<Item = Task>>(iter: T) -> Self {
-        Matrix { date:Utc::now().date_naive(), tasks: iter.into_iter().collect() }
-    }
-}
+// impl FromIterator<Task> for Matrix {
+//     fn from_iter<T: IntoIterator<Item = Task>>(iter: T) -> Self {
+//         Matrix { dates:Utc::now().date_naive(), tasks: iter.into_iter().collect() }
+//     }
+// }
 
-impl From<&[Task]> for Matrix {
-    fn from(value: &[Task]) -> Self {
-        Matrix { date: Utc::now().date_naive(), tasks: value.into() }
-    }
-}
+// impl From<&[Task]> for Matrix {
+//     fn from(value: &[Task]) -> Self {
+//         Matrix { date: Utc::now().date_naive(), tasks: value.into() }
+//     }
+// }
 
 #[derive(Debug, Clone)]
 pub struct Task {
+    id: u16,
     content: String,
     complete: Completeness,
     importance: Importance,
@@ -50,13 +51,17 @@ pub struct Task {
 }
 
 impl Task {
-    pub fn new(content: String, importance: Importance, urgency: Urgency) -> Task {
+    pub fn new(id: u16, content: String, importance: Importance, urgency: Urgency) -> Task {
         Task {
+            id,
             content,
             complete: Completeness::None,
             importance,
             urgency
         }
+    }
+    pub fn id(&self) -> u16{
+        self.id
     }
     pub fn compare_importance(&self, other: &Task) -> std::cmp::Ordering {
         self.importance.cmp(&other.importance)
