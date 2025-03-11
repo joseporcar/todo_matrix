@@ -4,7 +4,7 @@ pub struct Matrix {
     tasks: Vec<Task>
 }
 impl Matrix {
-    pub fn empty() -> Matrix {
+    pub fn new() -> Matrix {
         Matrix { date:Utc::now().date_naive(), tasks: Vec::new() }
     }
     pub fn date(&self) -> String {
@@ -28,12 +28,12 @@ impl Matrix {
 
 }
 
-impl From<&[Task]> for Matrix {
-    fn from(value: &[Task]) -> Self {
-        Matrix { date:Utc::now().date_naive(), tasks: value.to_vec()}
+impl FromIterator<Task> for Matrix {
+    fn from_iter<T: IntoIterator<Item = Task>>(iter: T) -> Self {
+        Matrix { date:Utc::now().date_naive(), tasks: iter.into_iter().collect() }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct Task {
     content: String,
     complete: Completeness,
@@ -42,7 +42,7 @@ pub struct Task {
 }
 
 impl Task {
-    pub fn new(content: String, importance: Importance, urgency: Urgency) -> Task {
+    fn new(content: String, importance: Importance, urgency: Urgency) -> Task {
         Task {
             content,
             complete: Completeness::None,
@@ -66,6 +66,7 @@ impl Task {
         self.complete = completeness
     }
 }
+
 
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord, Clone)]
 pub enum Importance {
