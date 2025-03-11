@@ -1,3 +1,4 @@
+
 use chrono::{NaiveDate, Utc};
 pub struct Matrix {
     date: NaiveDate,
@@ -20,10 +21,10 @@ impl Matrix {
         self.tasks.push(task);
     }
     pub fn sort_by_importance(&mut self) {
-        self.tasks.sort_by(|a, b| a.cmp_importance(b));
+        self.tasks.sort_by(|a, b| a.compare_importance(b));
     }
     pub fn sort_by_urgency(&mut self) {
-        self.tasks.sort_by(|a, b| a.cmp_urgency(b));
+        self.tasks.sort_by(|a, b| a.compare_urgency(b));
     }
 
 }
@@ -33,7 +34,14 @@ impl FromIterator<Task> for Matrix {
         Matrix { date:Utc::now().date_naive(), tasks: iter.into_iter().collect() }
     }
 }
-#[derive(Debug)]
+
+impl From<&[Task]> for Matrix {
+    fn from(value: &[Task]) -> Self {
+        Matrix { date: Utc::now().date_naive(), tasks: value.into() }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct Task {
     content: String,
     complete: Completeness,
@@ -42,7 +50,7 @@ pub struct Task {
 }
 
 impl Task {
-    fn new(content: String, importance: Importance, urgency: Urgency) -> Task {
+    pub fn new(content: String, importance: Importance, urgency: Urgency) -> Task {
         Task {
             content,
             complete: Completeness::None,
@@ -50,10 +58,10 @@ impl Task {
             urgency
         }
     }
-    fn cmp_importance(&self, other: &Task) -> std::cmp::Ordering {
+    pub fn compare_importance(&self, other: &Task) -> std::cmp::Ordering {
         self.importance.cmp(&other.importance)
     }
-    fn cmp_urgency(&self, other: &Task) -> std::cmp::Ordering {
+    pub fn compare_urgency(&self, other: &Task) -> std::cmp::Ordering {
         self.urgency.cmp(&other.urgency)
     }
     pub fn content(&self) -> &str {
