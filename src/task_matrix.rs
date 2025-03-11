@@ -62,7 +62,7 @@ impl Task {
 }
 
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
-enum Importance {
+pub enum Importance {
     Low,
     MidLow,
     Mid,
@@ -71,7 +71,7 @@ enum Importance {
 }
 
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
-enum Urgency {
+pub enum Urgency {
     Low,
     MidLow,
     Mid,
