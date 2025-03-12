@@ -69,6 +69,9 @@ impl Task {
             urgency
         }
     }
+    pub fn set_id(&mut self, id: u32) {
+        self.id = Uploaded(id)
+    }
     pub fn id(&self) -> Option<u32>{
         match self.id {
             Uploaded::Uploaded(id) => Some(id),
