@@ -26,7 +26,18 @@ impl Table {
             );
         ", []).expect("Error at creating table");
     }
+    pub fn add_task(&self, task: Task) -> Result<usize>{
 
+        self.connection.execute("
+            INSERT INTO task (dates, content, complete, ignorance, urgency) VALUES $1 $2 $3 $4 $5
+        ", (
+            task.dates().iter().map(|x| x.to_string()).collect::<Vec<String>>().join("_"),
+            task.content(),
+            1u8,
+            2u8,
+            3u8
+        ))
+    }
 
 }
 
