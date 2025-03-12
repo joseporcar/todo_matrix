@@ -43,7 +43,7 @@ impl Matrix {
 
 #[derive(Debug, Clone)]
 pub struct Task {
-    id: u16,
+    id: Uploaded,
     content: String,
     complete: Completeness,
     importance: Importance,
@@ -51,17 +51,29 @@ pub struct Task {
 }
 
 impl Task {
-    pub fn new(id: u16, content: String, importance: Importance, urgency: Urgency) -> Task {
+    pub fn new(content: String, importance: Importance, urgency: Urgency) -> Task {
         Task {
-            id,
+            id: Uploaded::NotUploaded,
             content,
             complete: Completeness::None,
             importance,
             urgency
         }
     }
-    pub fn id(&self) -> u16{
-        self.id
+    pub fn from_sql(id: u32, content: String, importance: Importance, urgency: Urgency) -> Task {
+        Task {
+            id: Uploaded::Uploaded(id),
+            content,
+            complete: Completeness::None,
+            importance,
+            urgency
+        }
+    }
+    pub fn id(&self) -> Option<u32>{
+        match self.id {
+            Uploaded::Uploaded(id) => Some(id),
+            Uploaded::NotUploaded => None
+        }
     }
     pub fn compare_importance(&self, other: &Task) -> std::cmp::Ordering {
         self.importance.cmp(&other.importance)
@@ -105,4 +117,10 @@ pub enum Completeness {
     Started,
     Almost, 
     Complete
+}
+
+#[derive(Debug, Clone)]
+enum Uploaded {
+    Uploaded(u32),
+    NotUploaded,
 }
