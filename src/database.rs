@@ -1,14 +1,17 @@
-use rusqlite::{Connection, Result};
-
 use crate::task_matrix::Task;
+use rusqlite::{Connection, Result};
 
 pub struct Table {
     connection: Connection
 }
 impl Table {
-    pub fn open_conection() -> Connection {
+    pub fn at_memory() -> Table {
         // TODO LINK TO ACTUAL FILE NOT JUST MEM
-        Connection::open_in_memory().expect("Failed to open database")
+        Table {connection: Connection::open_in_memory().expect("Failed to open database")}
+    }
+
+    pub fn at_storage(path:i32) -> Table {
+        todo!()
     }
     pub fn create_table(&self) {
         // Dates separated by an _
@@ -24,6 +27,9 @@ impl Table {
         ", []).expect("Error at creating table");
     }
 
+
 }
+
+
 
 
