@@ -1,4 +1,6 @@
 
+use std::str::FromStr;
+
 use chrono::{NaiveDate, Utc};
 pub struct DayMatrix {
     date: NaiveDate,
@@ -62,10 +64,13 @@ impl Task {
             urgency
         }
     }
-    // pub fn from_sql(id: u32, content: String, importance: Importance, urgency: Urgency) -> Task {
+    // pub fn from_sql(id: u32, dates: &str, content: String, importance: u8, urgency: u8) -> Task {
+    //     let dates = dates.split("_").map(|date| NaiveDate::from_str(date).unwrap()).collect();
+
     //     Task {
     //         id: Uploaded::Uploaded(id),
     //         content,
+    //         dates,
     //         complete: Completeness::None,
     //         importance,
     //         urgency
@@ -97,6 +102,9 @@ impl Task {
     }
     pub fn dates(&self) -> &Vec<NaiveDate> {
         &self.dates
+    }
+    pub fn sql_dates(&self) -> String {
+        self.dates.iter().map(|x| x.to_string()).collect::<Vec<String>>().join("_")
     }
 }
 
