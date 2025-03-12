@@ -1,15 +1,15 @@
 
 use chrono::{NaiveDate, Utc};
-pub struct Matrix {
-    dates: Vec<NaiveDate>,
+pub struct DayMatrix {
+    date: NaiveDate,
     tasks: Vec<Task>
 }
-impl Matrix {
-    pub fn default() -> Matrix {
-        Matrix { dates:vec![Utc::now().date_naive()], tasks: Vec::new() }
+impl DayMatrix {
+    pub fn default() -> DayMatrix {
+        DayMatrix { date:Utc::now().date_naive(), tasks: Vec::new() }
     }
-    pub fn dates(&self) -> &Vec<NaiveDate> {
-        &self.dates
+    pub fn date(&self) -> &NaiveDate {
+        &self.date
     }
     pub fn tasks(&self) -> &Vec<Task> {
         &self.tasks
@@ -46,31 +46,33 @@ pub struct Task {
     id: Uploaded,
     content: String,
     complete: Completeness,
+    dates: Vec<NaiveDate>,
     importance: Importance,
     urgency: Urgency,
 }
 
 impl Task {
-    pub fn new(content: String, importance: Importance, urgency: Urgency) -> Task {
+    pub fn new(content: String, dates: Vec<NaiveDate>, importance: Importance, urgency: Urgency) -> Task {
         Task {
             id: Uploaded::NotUploaded,
             content,
             complete: Completeness::None,
+            dates,
             importance,
             urgency
         }
     }
-    pub fn from_sql(id: u32, content: String, importance: Importance, urgency: Urgency) -> Task {
-        Task {
-            id: Uploaded::Uploaded(id),
-            content,
-            complete: Completeness::None,
-            importance,
-            urgency
-        }
-    }
+    // pub fn from_sql(id: u32, content: String, importance: Importance, urgency: Urgency) -> Task {
+    //     Task {
+    //         id: Uploaded::Uploaded(id),
+    //         content,
+    //         complete: Completeness::None,
+    //         importance,
+    //         urgency
+    //     }
+    // }
     pub fn set_id(&mut self, id: u32) {
-        self.id = Uploaded(id)
+        self.id = Uploaded::Uploaded(id)
     }
     pub fn id(&self) -> Option<u32>{
         match self.id {
@@ -92,6 +94,9 @@ impl Task {
     }
     pub fn set_completeness(&mut self, completeness: Completeness) {
         self.complete = completeness
+    }
+    pub fn dates(&self) -> &Vec<NaiveDate> {
+        &self.dates
     }
 }
 
