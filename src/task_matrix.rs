@@ -140,7 +140,13 @@ pub enum Urgency {
 }
 impl ToString for Urgency {
     fn to_string(&self) -> String {
-        todo!()
+        match self {
+            Urgency::Low => "urgency_low".to_string(),
+            Urgency::MidLow => "urgency_midlow".to_string(),
+            Urgency::Mid => "urgency_mid".to_string(),
+            Urgency::MidHigh => "urgency_midhigh".to_string(),
+            Urgency::High => "urgency_high".to_string(),
+        }
     }
 }
 
