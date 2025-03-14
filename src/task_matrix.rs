@@ -1,6 +1,3 @@
-
-use std::str::FromStr;
-
 use chrono::{NaiveDate, Utc};
 pub struct DayMatrix {
     date: NaiveDate,
@@ -102,9 +99,6 @@ impl Task {
     }
     pub fn dates(&self) -> &Vec<NaiveDate> {
         &self.dates
-    }
-    pub fn sql_dates(&self) -> String {
-        self.dates.iter().map(|x| x.to_string()).collect::<Vec<String>>().join("_")
     }
 }
 
