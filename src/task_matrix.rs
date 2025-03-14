@@ -1,12 +1,17 @@
+use std::fmt::Display;
+
 use chrono::{NaiveDate, Utc};
-use rusqlite::{types::ToSqlOutput, ToSql};
+use rusqlite::{ToSql, types::ToSqlOutput};
 pub struct DayMatrix {
     date: NaiveDate,
-    tasks: Vec<Task>
+    tasks: Vec<Task>,
 }
 impl DayMatrix {
     pub fn default() -> DayMatrix {
-        DayMatrix { date:Utc::now().date_naive(), tasks: Vec::new() }
+        DayMatrix {
+            date: Utc::now().date_naive(),
+            tasks: Vec::new(),
+        }
     }
     pub fn date(&self) -> &NaiveDate {
         &self.date
@@ -14,7 +19,7 @@ impl DayMatrix {
     pub fn tasks(&self) -> &Vec<Task> {
         &self.tasks
     }
-    pub fn task(&self, index:usize) -> &Task {
+    pub fn task(&self, index: usize) -> &Task {
         &self.tasks[index]
     }
     pub fn add_task(&mut self, task: Task) {
@@ -26,7 +31,6 @@ impl DayMatrix {
     pub fn sort_by_urgency(&mut self) {
         self.tasks.sort_by(|a, b| a.compare_urgency(b));
     }
-
 }
 
 // impl FromIterator<Task> for Matrix {
@@ -52,14 +56,19 @@ pub struct Task {
 }
 
 impl Task {
-    pub fn new(content: String, dates: Vec<NaiveDate>, importance: Importance, urgency: Urgency) -> Task {
+    pub fn new(
+        content: String,
+        dates: Vec<NaiveDate>,
+        importance: Importance,
+        urgency: Urgency,
+    ) -> Task {
         Task {
             id: Uploaded::NotUploaded,
             content,
             complete: Completeness::None,
             dates,
             importance,
-            urgency
+            urgency,
         }
     }
     // pub fn from_sql(id: u32, dates: &str, content: String, importance: u8, urgency: u8) -> Task {
@@ -77,10 +86,10 @@ impl Task {
     pub fn set_id(&mut self, id: u32) {
         self.id = Uploaded::Uploaded(id)
     }
-    pub fn id(&self) -> Option<u32>{
+    pub fn id(&self) -> Option<u32> {
         match self.id {
             Uploaded::Uploaded(id) => Some(id),
-            Uploaded::NotUploaded => None
+            Uploaded::NotUploaded => None,
         }
     }
     pub fn compare_importance(&self, other: &Task) -> std::cmp::Ordering {
@@ -109,24 +118,17 @@ impl Task {
     }
 }
 
-
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord, Clone)]
 pub enum Importance {
     Low,
     MidLow,
     Mid,
     MidHigh,
-    High
+    High,
 }
-impl ToString for Importance {
-    fn to_string(&self) -> String {
-        match self {
-            Importance::Low => "importance_low".to_string(),
-            Importance::MidLow => "importance_midlow".to_string(),
-            Importance::Mid => "importance_mid".to_string(),
-            Importance::MidHigh => "importance_midhigh".to_string(),
-            Importance::High => "importance_high".to_string(),
-        }
+impl Display for Importance {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 
@@ -142,17 +144,11 @@ pub enum Urgency {
     MidLow,
     Mid,
     MidHigh,
-    High
+    High,
 }
-impl ToString for Urgency {
-    fn to_string(&self) -> String {
-        match self {
-            Urgency::Low => "urgency_low".to_string(),
-            Urgency::MidLow => "urgency_midlow".to_string(),
-            Urgency::Mid => "urgency_mid".to_string(),
-            Urgency::MidHigh => "urgency_midhigh".to_string(),
-            Urgency::High => "urgency_high".to_string(),
-        }
+impl Display for Urgency {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 
@@ -166,18 +162,13 @@ impl ToSql for Urgency {
 pub enum Completeness {
     None,
     Started,
-    Almost, 
-    Complete
+    Almost,
+    Complete,
 }
 
-impl ToString for Completeness {
-    fn to_string(&self) -> String {
-        match self {
-            Completeness::None => "completeness_none".to_string(),
-            Completeness::Started => "completeness_started".to_string(),
-            Completeness::Almost => "completeness_almost".to_string(),
-            Completeness::Complete => "completeness_complete".to_string(),
-        }
+impl Display for Completeness {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 
