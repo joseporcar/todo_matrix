@@ -114,7 +114,13 @@ pub enum Importance {
 }
 impl ToString for Importance {
     fn to_string(&self) -> String {
-        todo!()
+        match self {
+            Importance::Low => "importance_low".to_string(),
+            Importance::MidLow => "importance_midlow".to_string(),
+            Importance::Mid => "importance_mid".to_string(),
+            Importance::MidHigh => "importance_midhigh".to_string(),
+            Importance::High => "importance_high".to_string(),
+        }
     }
 }
 
@@ -155,10 +161,10 @@ pub enum Completeness {
 impl ToString for Completeness {
     fn to_string(&self) -> String {
         match self {
-            Completeness::None => "none".to_string(),
-            Completeness::Started => "started".to_string(),
-            Completeness::Almost => "almost".to_string(),
-            Completeness::Complete => "complete".to_string(),
+            Completeness::None => "completeness_none".to_string(),
+            Completeness::Started => "completeness_started".to_string(),
+            Completeness::Almost => "completeness_almost".to_string(),
+            Completeness::Complete => "completeness_complete".to_string(),
         }
     }
 }
