@@ -34,7 +34,7 @@ impl Table {
         ", (
             Table::ugly_dates_sql_workaround(task.dates()),
             task.content(),
-            //task.completeness(),
+            task.completeness(),
             2u8,
             3u8
         ))

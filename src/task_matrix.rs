@@ -1,4 +1,5 @@
 use chrono::{NaiveDate, Utc};
+use rusqlite::{types::ToSqlOutput, ToSql};
 pub struct DayMatrix {
     date: NaiveDate,
     tasks: Vec<Task>
@@ -127,6 +128,23 @@ pub enum Completeness {
     Started,
     Almost, 
     Complete
+}
+
+impl ToSql for Completeness {
+    fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput<'_>> {
+        Ok(ToSqlOutput::from(self.to_string()))
+    }
+}
+
+impl ToString for Completeness {
+    fn to_string(&self) -> String {
+        match self {
+            Completeness::None => "none".to_string(),
+            Completeness::Started => "started".to_string(),
+            Completeness::Almost => "almost".to_string(),
+            Completeness::Complete => "complete".to_string(),
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
