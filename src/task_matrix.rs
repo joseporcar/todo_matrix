@@ -101,6 +101,12 @@ impl Task {
     pub fn dates(&self) -> &Vec<NaiveDate> {
         &self.dates
     }
+    pub fn urgency(&self) -> &Urgency {
+        &self.urgency
+    }
+    pub fn importance(&self) -> &Importance {
+        &self.importance
+    }
 }
 
 
