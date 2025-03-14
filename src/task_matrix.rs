@@ -112,6 +112,17 @@ pub enum Importance {
     MidHigh,
     High
 }
+impl ToString for Importance {
+    fn to_string(&self) -> String {
+        todo!()
+    }
+}
+
+impl ToSql for Importance {
+    fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput<'_>> {
+        Ok(ToSqlOutput::from(self.to_string()))
+    }
+}
 
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord, Clone)]
 pub enum Urgency {
@@ -120,6 +131,17 @@ pub enum Urgency {
     Mid,
     MidHigh,
     High
+}
+impl ToString for Urgency {
+    fn to_string(&self) -> String {
+        todo!()
+    }
+}
+
+impl ToSql for Urgency {
+    fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput<'_>> {
+        Ok(ToSqlOutput::from(self.to_string()))
+    }
 }
 
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord, Clone)]
@@ -130,12 +152,6 @@ pub enum Completeness {
     Complete
 }
 
-impl ToSql for Completeness {
-    fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput<'_>> {
-        Ok(ToSqlOutput::from(self.to_string()))
-    }
-}
-
 impl ToString for Completeness {
     fn to_string(&self) -> String {
         match self {
@@ -144,6 +160,12 @@ impl ToString for Completeness {
             Completeness::Almost => "almost".to_string(),
             Completeness::Complete => "complete".to_string(),
         }
+    }
+}
+
+impl ToSql for Completeness {
+    fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput<'_>> {
+        Ok(ToSqlOutput::from(self.to_string()))
     }
 }
 

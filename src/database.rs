@@ -35,8 +35,8 @@ impl Table {
             Table::ugly_dates_sql_workaround(task.dates()),
             task.content(),
             task.completeness(),
-            2u8,
-            3u8
+            task.importance(),
+            task.urgency(),
         ))
     }
     fn ugly_dates_sql_workaround(dates: &Vec<NaiveDate>) -> String {
