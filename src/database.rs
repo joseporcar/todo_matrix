@@ -30,7 +30,7 @@ impl Table {
     pub fn add_task(&self, task: Task) -> Result<usize>{
 
         self.connection.execute("
-            INSERT INTO task (dates, content, complete, ignorance, urgency) VALUES $1 $2 $3 $4 $5
+            INSERT INTO task (dates, content, complete, importance, urgency) VALUES $1 $2 $3 $4 $5
         ", (
             Table::ugly_dates_sql_workaround(task.dates()),
             task.content(),
