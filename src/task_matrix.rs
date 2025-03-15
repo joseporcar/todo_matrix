@@ -1,7 +1,7 @@
-use std::fmt::Display;
+use std::{fmt::Display, str::FromStr};
 
 use chrono::{NaiveDate, Utc};
-use rusqlite::{ToSql, types::ToSqlOutput};
+use rusqlite::{types::{FromSql, ToSqlOutput}, ToSql};
 pub struct DayMatrix {
     date: NaiveDate,
     tasks: Vec<Task>,
@@ -71,18 +71,18 @@ impl Task {
             urgency,
         }
     }
-    // pub fn from_sql(id: u32, dates: &str, content: String, importance: u8, urgency: u8) -> Task {
-    //     let dates = dates.split("_").map(|date| NaiveDate::from_str(date).unwrap()).collect();
+    pub fn from_sql(id: u32, dates: String, content: String, complete: Completeness, importance: Importance, urgency: Urgency) -> Task {
+        let dates = dates.split("_").map(|date| NaiveDate::from_str(date).unwrap()).collect();
 
-    //     Task {
-    //         id: Uploaded::Uploaded(id),
-    //         content,
-    //         dates,
-    //         complete: Completeness::None,
-    //         importance,
-    //         urgency
-    //     }
-    // }
+        Task {
+            id: Uploaded::Uploaded(id),
+            content,
+            dates,
+            complete,
+            importance,
+            urgency
+        }
+    }
     pub fn set_id(&mut self, id: u32) {
         self.id = Uploaded::Uploaded(id)
     }
@@ -175,6 +175,12 @@ impl Display for Completeness {
 impl ToSql for Completeness {
     fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput<'_>> {
         Ok(ToSqlOutput::from(self.to_string()))
+    }
+}
+
+impl FromSql for Completeness {
+    fn column_result(value: rusqlite::types::ValueRef<'_>) -> rusqlite::types::FromSqlResult<Self> {
+        todo!()
     }
 }
 

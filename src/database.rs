@@ -56,11 +56,11 @@ impl Table {
             .join("_")
     }
 
-    pub fn get_all(&self) -> Vec<Task> {
-        let mut statement = self.connection.prepare("SELECT * from T").unwrap();
-        // statement.query_map([], |row|
-        //     todo!()
-        // ).iter();//.collect();
-        todo!()
-    }
+    // pub fn get_all(&self) -> Vec<Task> {
+    //     let mut statement = self.connection.prepare("SELECT * from task").unwrap();
+    //     statement.query_map([], |row|
+    //         Task::from_sql
+    //     ).iter().collect()
+
+    // }
 }
