@@ -58,6 +58,7 @@ pub struct Task {
 impl Task {
     pub fn new(
         content: String,
+        complete: Completeness, 
         dates: Vec<NaiveDate>,
         importance: Importance,
         urgency: Urgency,
@@ -65,7 +66,7 @@ impl Task {
         Task {
             id: Uploaded::NotUploaded,
             content,
-            complete: Completeness::None,
+            complete,
             dates,
             importance,
             urgency,
@@ -166,6 +167,18 @@ pub enum Completeness {
     Complete,
 }
 
+impl From<&[u8]> for Completeness {
+    fn from(value: &[u8]) -> Self {
+        match value[0] {
+            b'N' => Completeness::None,
+            b'S' => Completeness::Started,
+            b'A' => Completeness::Almost,
+            b'C' => Completeness::Complete,
+            _ => Completeness::None,
+        }
+    }
+}
+
 impl Display for Completeness {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{:?}", self)
@@ -180,7 +193,10 @@ impl ToSql for Completeness {
 
 impl FromSql for Completeness {
     fn column_result(value: rusqlite::types::ValueRef<'_>) -> rusqlite::types::FromSqlResult<Self> {
-        todo!()
+        match value {
+            rusqlite::types::ValueRef::Blob(items) => todo!(),
+            _ => Err(rusqlite::types::FromSqlError::InvalidType)
+        }
     }
 }
 

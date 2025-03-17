@@ -13,6 +13,7 @@ pub fn testing() {
     let dates = NaiveDate::from_str("2024-02-23").unwrap();
     let Task = Task::new(
         "Do hw".to_string(),
+        Completeness::Almost,
         vec![dates],
         Importance::High,
         Urgency::Low,
@@ -20,4 +21,5 @@ pub fn testing() {
 
     conn.create_table();
     conn.add_task(Task).unwrap();
+    println!("{}",conn.get_completeness())
 }

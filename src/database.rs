@@ -36,9 +36,7 @@ impl Table {
     }
     pub fn add_task(&self, task: Task) -> Result<usize> {
         self.connection.execute(
-            "
-            INSERT INTO task (dates, content, complete, importance, urgency) VALUES $1 $2 $3 $4 $5
-        ",
+            "INSERT INTO task (dates, content, complete, importance, urgency) VALUES $1 $2 $3 $4 $5",
             (
                 Table::ugly_dates_sql_workaround(task.dates()),
                 task.content(),
@@ -63,4 +61,8 @@ impl Table {
     //     ).iter().collect()
 
     // }
+    pub fn get_completeness(&self) -> crate::task_matrix::Completeness {
+        let mut statement = self.connection.prepare("SELECT completeness from task").unwrap();
+        statement.query([]).unwrap().next().unwrap().unwrap().get(0).unwrap()
+    }
 }
