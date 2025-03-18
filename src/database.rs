@@ -1,6 +1,7 @@
-use crate::task_matrix::{Importance, Task};
+use crate::task_matrix::{Completeness, Importance, Task};
 use chrono::NaiveDate;
-use rusqlite::{Connection, Result, ToSql, types::FromSql};
+use gtk::builders::ComboBoxBuilder;
+use rusqlite::{fallible_iterator::FallibleIterator, types::FromSql, Connection, Result, ToSql};
 
 pub struct Table {
     connection: Connection,
@@ -61,8 +62,12 @@ impl Table {
     //     ).iter().collect()
 
     // }
-    pub fn get_completeness(&self) -> crate::task_matrix::Completeness {
+    pub fn get_completeness(&self) -> Vec<crate::task_matrix::Completeness> {
         let mut statement = self.connection.prepare("SELECT complete from task").unwrap();
-        statement.query([]).unwrap().next().unwrap().unwrap().get(0).unwrap()
+        statement.query([]).unwrap().map(|row| row.get::<_, Completeness>(0)).unwrap().collect()
+    }
+
+    pub fn clear_table(&self) {
+        self.connection.execute("DROP TABLE task", []).unwrap();
     }
 }

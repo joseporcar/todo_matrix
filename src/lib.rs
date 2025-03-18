@@ -18,8 +18,8 @@ pub fn testing() {
         Importance::High,
         Urgency::Low,
     );
-
+    conn.clear_table();
     conn.create_table();
     conn.add_task(task).unwrap();
-    println!("{}",conn.get_completeness())
+    println!("{:?}",conn.get_completeness())
 }
