@@ -13,8 +13,8 @@ impl Table {
         }
     }
 
-    pub fn at_storage(path: i32) -> Table {
-        todo!()
+    pub fn at_storage(path: &str) -> Table {
+        Table { connection: Connection::open(path).expect("failed to open database") }
     }
     pub fn create_table(&self) {
         // Dates separated by an _
@@ -23,11 +23,11 @@ impl Table {
                 "
             CREATE TABLE IF NOT EXISTS task (
                 id          INTEGER PRIMARY KEY,
-                dates       BLOB NOT NULL,
+                dates       TEXT NOT NULL,
                 content     TEXT NOT NULL,
-                complete    BLOB NOT NULL,
-                importance  BLOB NOT NULL,
-                urgency     BLOB NOT NULL
+                complete    TEXT NOT NULL,
+                importance  TEXT NOT NULL,
+                urgency     TEXT NOT NULL
             );
         ",
                 [],
@@ -36,7 +36,7 @@ impl Table {
     }
     pub fn add_task(&self, task: Task) -> Result<usize> {
         self.connection.execute(
-            "INSERT INTO task (dates, content, complete, importance, urgency) VALUES $1 $2 $3 $4 $5",
+            "INSERT INTO task (dates, content, complete, importance, urgency) VALUES ($1, $2, $3, $4, $5)",
             (
                 Table::ugly_dates_sql_workaround(task.dates()),
                 task.content(),
@@ -62,7 +62,7 @@ impl Table {
 
     // }
     pub fn get_completeness(&self) -> crate::task_matrix::Completeness {
-        let mut statement = self.connection.prepare("SELECT completeness from task").unwrap();
+        let mut statement = self.connection.prepare("SELECT complete from task").unwrap();
         statement.query([]).unwrap().next().unwrap().unwrap().get(0).unwrap()
     }
 }

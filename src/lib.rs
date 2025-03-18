@@ -9,9 +9,9 @@ pub use graphics::run_app;
 
 pub fn testing() {
     use task_matrix::*;
-    let conn = database::Table::at_memory();
+    let conn = database::Table::at_storage("./db.db3");
     let dates = NaiveDate::from_str("2024-02-23").unwrap();
-    let Task = Task::new(
+    let task = Task::new(
         "Do hw".to_string(),
         Completeness::Almost,
         vec![dates],
@@ -20,6 +20,6 @@ pub fn testing() {
     );
 
     conn.create_table();
-    conn.add_task(Task).unwrap();
+    conn.add_task(task).unwrap();
     println!("{}",conn.get_completeness())
 }

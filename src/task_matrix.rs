@@ -194,7 +194,7 @@ impl ToSql for Completeness {
 impl FromSql for Completeness {
     fn column_result(value: rusqlite::types::ValueRef<'_>) -> rusqlite::types::FromSqlResult<Self> {
         match value {
-            rusqlite::types::ValueRef::Blob(items) => todo!(),
+            rusqlite::types::ValueRef::Text(items) => Ok(items.into()),
             _ => Err(rusqlite::types::FromSqlError::InvalidType)
         }
     }
