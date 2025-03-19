@@ -1,7 +1,8 @@
 use chrono::{NaiveDate, Utc};
 
+use crate::task::Task;
 
-
+#[derive(Debug)]
 pub struct DayMatrix {
     date: NaiveDate,
     tasks: Vec<Task>,
@@ -12,6 +13,9 @@ impl DayMatrix {
             date: Utc::now().date_naive(),
             tasks: Vec::new(),
         }
+    }
+    pub fn new(date: NaiveDate, tasks: Vec<Task>) -> DayMatrix {
+        DayMatrix { date, tasks }
     }
     pub fn date(&self) -> &NaiveDate {
         &self.date
