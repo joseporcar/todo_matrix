@@ -1,14 +1,14 @@
-mod completeness;
-mod importance;
-mod urgency;
+pub mod completeness;
+pub mod importance;
+pub mod urgency;
 
 use std::str::FromStr;
 
 use chrono::NaiveDate;
-use completeness::Completeness;
-use importance::Importance;
+pub use completeness::Completeness;
+pub use importance::Importance;
 use rusqlite::Row;
-use urgency::Urgency;
+pub use urgency::Urgency;
 
 #[derive(Debug, Clone)]
 pub struct Task {
@@ -87,9 +87,9 @@ impl Task {
 impl From<&Row<'_>> for Task {
     fn from(value: &Row) -> Self {
         Task { id:Uploaded::Uploaded(value.get(0).unwrap()), 
-            content: value.get(1).unwrap(), 
-            complete: value.get(2).unwrap(), 
-            dates: ugly_sql_dates_workaround(value.get(3).unwrap()), 
+            dates: ugly_sql_dates_workaround(value.get(1).unwrap()), 
+            content: value.get(2).unwrap(), 
+            complete: value.get(3).unwrap(), 
             importance: value.get(4).unwrap(), 
             urgency: value.get(5).unwrap() 
         }
