@@ -1,10 +1,11 @@
 mod database;
 mod graphics;
 mod task;
+mod matrix;
 
 use std::str::FromStr;
 
-use chrono::NaiveDate;
+use chrono::{NaiveDate, Utc};
 pub use graphics::run_app;
 use task::{Completeness, Importance, Task, Urgency};
 
@@ -14,12 +15,12 @@ pub fn testing() {
     let task = Task::new(
         "Do hw".to_string(),
         Completeness::Almost,
-        vec![dates],
+        vec![dates, Utc::now().date_naive()],
         Importance::High,
         Urgency::Low,
     );
-    conn.clear_table();
+    // conn.clear_table();
     conn.create_table();
     conn.add_task(task).unwrap();
-    println!("{:?}",conn.get_all_tasks())
+    println!("{:?}",conn.get_tasks_from_day(Utc::now().date_naive()))
 }

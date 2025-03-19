@@ -1,13 +1,12 @@
-use crate::task::Task;
+use crate::{matrix::DayMatrix, task::Task};
 use chrono::NaiveDate;
-use rusqlite::{fallible_iterator::FallibleIterator, types::FromSql, Connection, Result, ToSql};
+use rusqlite::{fallible_iterator::FallibleIterator, Connection, Result};
 
 pub struct Table {
     connection: Connection,
 }
 impl Table {
     pub fn at_memory() -> Table {
-        // TODO LINK TO ACTUAL FILE NOT JUST MEM
         Table {
             connection: Connection::open_in_memory().expect("Failed to open database"),
         }
@@ -58,11 +57,14 @@ impl Table {
         let mut statement = self.connection.prepare("SELECT * from task").unwrap();
         statement.query([]).unwrap().map(|row| Ok(Task::from(row))).unwrap().collect()
     }
-    // pub fn get_completeness(&self) -> Vec<crate::task_matrix::Completeness> {
-    //     let mut statement = self.connection.prepare("SELECT complete from task").unwrap();
-    //     statement.query([]).unwrap().map(|row| row.get::<_, Completeness>(0)).unwrap().collect()
-    // }
+    
+    pub fn get_tasks_from_day(&self, date: NaiveDate) -> DayMatrix {
+        let str_date = date.to_string();
+        let mut statement = self.connection.prepare(&format!("SELECT * from task WHERE dates LIKE '%{}%'", str_date)).unwrap();
+        let tasks = statement.query([]).unwrap().map(|row| Ok(Task::from(row))).unwrap().collect();
 
+        DayMatrix::new(date, tasks)
+    }
     pub fn clear_table(&self) {
         self.connection.execute("DROP TABLE task", []).unwrap();
     }
