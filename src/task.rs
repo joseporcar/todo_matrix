@@ -7,6 +7,7 @@ use std::str::FromStr;
 use chrono::NaiveDate;
 use completeness::Completeness;
 use importance::Importance;
+use rusqlite::Row;
 use urgency::Urgency;
 
 #[derive(Debug, Clone)]
@@ -83,7 +84,21 @@ impl Task {
     }
 }
 
+impl From<&Row<'_>> for Task {
+    fn from(value: &Row) -> Self {
+        Task { id:Uploaded::Uploaded(value.get(0).unwrap()), 
+            content: value.get(1).unwrap(), 
+            complete: value.get(2).unwrap(), 
+            dates: ugly_sql_dates_workaround(value.get(3).unwrap()), 
+            importance: value.get(4).unwrap(), 
+            urgency: value.get(5).unwrap() 
+        }
+    }
+}
 
+fn ugly_sql_dates_workaround(dates: String) -> Vec<NaiveDate> {
+    dates.split('_').map(|date| NaiveDate::from_str(date).unwrap()).collect()
+}
 #[derive(Debug, Clone)]
 enum Uploaded {
     Uploaded(u32),
