@@ -1,4 +1,4 @@
-use crate::task_matrix::{Completeness, Importance, Task};
+use crate::task_matrix::{Completeness, Importance, task};
 use chrono::NaiveDate;
 use gtk::builders::ComboBoxBuilder;
 use rusqlite::{fallible_iterator::FallibleIterator, types::FromSql, Connection, Result, ToSql};
@@ -35,7 +35,7 @@ impl Table {
             )
             .expect("Error at creating table");
     }
-    pub fn add_task(&self, task: Task) -> Result<usize> {
+    pub fn add_task(&self, task: task) -> Result<usize> {
         self.connection.execute(
             "INSERT INTO task (dates, content, complete, importance, urgency) VALUES ($1, $2, $3, $4, $5)",
             (
@@ -55,13 +55,12 @@ impl Table {
             .join("_")
     }
 
-    // pub fn get_all(&self) -> Vec<Task> {
-    //     let mut statement = self.connection.prepare("SELECT * from task").unwrap();
-    //     statement.query_map([], |row|
-    //         Task::from_sql
-    //     ).iter().collect()
+    pub fn get_all_tasks(&self) -> Vec<task> {
+        let mut statement = self.connection.prepare("SELECT * from task").unwrap();
+        statement.query([]).unwrap().map(|row| row.get::<_, Completeness>(0)).unwrap().collect()
 
-    // }
+
+    }
     pub fn get_completeness(&self) -> Vec<crate::task_matrix::Completeness> {
         let mut statement = self.connection.prepare("SELECT complete from task").unwrap();
         statement.query([]).unwrap().map(|row| row.get::<_, Completeness>(0)).unwrap().collect()
