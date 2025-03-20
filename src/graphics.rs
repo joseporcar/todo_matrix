@@ -12,14 +12,34 @@ pub fn build_app(app_id: &str) -> gtk::Application {
 }
 
 fn build_ui(app: &gtk::Application) {
-    let label = gtk::Label::builder().label("label").build();
 
     gtk::ApplicationWindow::builder()
         .application(app)
         .title("Todo—Matrix")
-        .height_request(300)
-        .width_request(300)
-        .child(&label)
+        .height_request(500)
+        .width_request(500)
+        .child(&main_box())
         .build()
         .present();
+}
+
+fn main_box() -> gtk::Box {
+
+    todo!()
+}
+
+fn vertical_labels() -> gtk::Box {
+    todo!()
+}
+
+fn horizontal_labels() -> gtk::Box {
+    todo!()
+}
+
+fn display_box() -> gtk::Box {
+    todo!()
+}
+
+fn top_bar() -> gtk::Box {
+    todo!()
 }

@@ -19,8 +19,8 @@ pub fn testing() {
         Importance::High,
         Urgency::Low,
     );
-    // conn.clear_table();
+    conn.clear_table();
     conn.create_table();
     conn.add_task(task).unwrap();
-    println!("{:?}",conn.get_tasks_from_day(Utc::now().date_naive()))
+    println!("{:?}",conn.get_tasks_from_day(dates))
 }
