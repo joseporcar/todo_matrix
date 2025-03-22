@@ -1,4 +1,4 @@
-use gtk::{prelude::*, Align};
+use gtk::{gdk, prelude::*, Align};
 use gtk::{self, glib, Orientation};
 
 pub fn run_app(app_id: &str) -> glib::ExitCode {
@@ -7,8 +7,21 @@ pub fn run_app(app_id: &str) -> glib::ExitCode {
 }
 fn build_app(app_id: &str) -> gtk::Application {
     let app = gtk::Application::builder().application_id(app_id).build();
+    app.connect_startup(|_| load_css());
     app.connect_activate(build_ui);
     app
+}
+fn load_css() {
+    // Load the CSS file and add it to the provider
+    let provider = gtk::CssProvider::new();
+    provider.load_from_string(include_str!("style.css"));
+
+    // Add the provider to the default screen
+    gtk::style_context_add_provider_for_display(
+        &gdk::Display::default().expect("Could not connect to a display."),
+        &provider,
+        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
+    );
 }
 
 fn build_ui(app: &gtk::Application) {
