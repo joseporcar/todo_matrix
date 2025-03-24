@@ -1,4 +1,3 @@
-* {
-    color:white;
-    background-color: white;
+box {
+    border: 3px solid white;
 }
