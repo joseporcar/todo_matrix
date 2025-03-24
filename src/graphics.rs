@@ -1,4 +1,4 @@
-use gtk::{gdk, prelude::*, Align};
+use gtk::{gdk, prelude::*, Align, Label};
 use gtk::{self, glib, Orientation};
 
 pub fn run_app(app_id: &str) -> glib::ExitCode {
@@ -69,7 +69,7 @@ fn horizontal_labels() -> gtk::Box {
         .orientation(Orientation::Horizontal)
         .homogeneous(true)
         .build();
-
+    horizontal_labels.append(&Label::new(Some("")));
     label_adder(&mut horizontal_labels);
     horizontal_labels
 }
