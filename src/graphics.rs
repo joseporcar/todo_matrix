@@ -58,21 +58,19 @@ fn center_box() -> gtk::Box {
 fn vertical_labels() -> gtk::Box {
     let mut vertical_labels = gtk::Box::builder()
         .orientation(Orientation::Vertical)
-        .vexpand(true)
-        .valign(Align::Center)
-        
+        .homogeneous(true)
         .build();
     label_adder(&mut vertical_labels);
     vertical_labels
 }
 
 fn horizontal_labels() -> gtk::Box {
-    let label = gtk::Label::builder().label("mr labler").build();
-    let horizontal_labels = gtk::Box::builder()
+    let mut horizontal_labels = gtk::Box::builder()
         .orientation(Orientation::Horizontal)
+        .homogeneous(true)
         .build();
 
-    horizontal_labels.append(&label);
+    label_adder(&mut horizontal_labels);
     horizontal_labels
 }
 
