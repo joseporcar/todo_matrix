@@ -49,73 +49,31 @@ fn main_box() -> gtk::Box {
 
 fn matrix_grid() -> gtk::Grid {
     let mut grid = gtk::Grid::builder()
+        .row_homogeneous(true)
+        .column_homogeneous(true)
         .build();
 
-    //grid.attach(child, column, row, width, height);
     label_adder(&mut grid, gtk::PositionType::Bottom);
     label_adder(&mut grid, gtk::PositionType::Left);
     grid
 }
 
-fn label_adder(grid: &mut gtk::Grid, orientation: gtk::PositionType) {
-    let labels = ["High", "MidHigh", "Mid", "MidLow", "Low"];
-    match orientation {
-        gtk::PositionType::Bottom => {
-
-        }
+fn label_adder(grid: &mut gtk::Grid, position: gtk::PositionType) {
+    let labels = ["High", "MidHigh", "Mid", "MidLow", "Low"].map(|str| gtk::Label::new(Some(str)));
+    match position {
         gtk::PositionType::Left => {
-
+            for (i, label) in labels.iter().enumerate() {
+                grid.attach(label, 0, i as i32, 1, 1);
+            }
+        }
+        gtk::PositionType::Bottom => {
+            for (i, label) in labels.iter().rev().enumerate() {
+                grid.attach(label, i as i32 + 1, 6, 1, 1);
+            }
         }
         _ => ()
     }
 
-}
-// fn center_box() -> gtk::Box {
-//     let center_box = gtk::Box::builder()
-//         .orientation(Orientation::Horizontal)
-//         .vexpand(true)
-//         .hexpand(true)
-//         .build();
-//     center_box.append(&vertical_labels());
-//     center_box.append(&content_box());
-//     center_box
-// }
-// fn vertical_labels() -> gtk::Box {
-//     let mut vertical_labels = gtk::Box::builder()
-//         .orientation(Orientation::Vertical)
-//         .homogeneous(true)
-//         .build();
-//     label_adder(&mut vertical_labels);
-//     vertical_labels
-// }
-
-// fn horizontal_labels() -> gtk::Box {
-//     let mut horizontal_labels = gtk::Box::builder()
-//         .orientation(Orientation::Horizontal)
-//         .homogeneous(true)
-//         .build();
-//     horizontal_labels.append(&Label::new(Some("")));
-//     label_adder(&mut horizontal_labels);
-//     horizontal_labels
-// }
-
-// fn label_adder(area: &mut gtk::Box) {
-//     for label in ["High", "MidHigh", "Mid", "MidLow", "Low"] {
-//         area.append(&gtk::Label::builder().label(label).build());
-//     }
-// }
-
-fn content_box() -> gtk::Box {
-    let label = gtk::Label::builder().label("content_box").build();
-    let content_box = gtk::Box::builder()
-        .orientation(Orientation::Horizontal)
-        .halign(Align::Center)
-        .hexpand(true)
-        .vexpand(true)
-        .build();
-
-    content_box.append(&label);
-    content_box
 }
 
 fn top_bar() -> gtk::Box {

@@ -1,6 +1,10 @@
 * {
     font: 16px "IBM Plex Sans";
 }
-box {
+label, box {
     border: 3px solid white;
+}
+
+grid, grid>* {
+    border: 3px solid black;
 }
