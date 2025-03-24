@@ -1,5 +1,5 @@
-use gtk::{gdk, prelude::*, Align, Label};
-use gtk::{self, glib, Orientation};
+use gtk::{self, Orientation, glib};
+use gtk::{gdk, prelude::*};
 
 pub fn run_app(app_id: &str) -> glib::ExitCode {
     let app = build_app(app_id);
@@ -25,7 +25,6 @@ fn load_css() {
 }
 
 fn build_ui(app: &gtk::Application) {
-
     gtk::ApplicationWindow::builder()
         .application(app)
         .title("Todo—Matrix")
@@ -71,9 +70,8 @@ fn label_adder(grid: &mut gtk::Grid, position: gtk::PositionType) {
                 grid.attach(label, i as i32 + 1, 6, 1, 1);
             }
         }
-        _ => ()
+        _ => (),
     }
-
 }
 
 fn top_bar() -> gtk::Box {

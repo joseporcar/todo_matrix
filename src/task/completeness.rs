@@ -1,7 +1,9 @@
 use std::fmt::Display;
 
-use rusqlite::{types::{FromSql, ToSqlOutput}, ToSql};
-
+use rusqlite::{
+    ToSql,
+    types::{FromSql, ToSqlOutput},
+};
 
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord, Clone)]
 pub enum Completeness {
@@ -39,7 +41,7 @@ impl FromSql for Completeness {
     fn column_result(value: rusqlite::types::ValueRef<'_>) -> rusqlite::types::FromSqlResult<Self> {
         match value {
             rusqlite::types::ValueRef::Text(items) => Ok(items.into()),
-            _ => Err(rusqlite::types::FromSqlError::InvalidType)
+            _ => Err(rusqlite::types::FromSqlError::InvalidType),
         }
     }
 }

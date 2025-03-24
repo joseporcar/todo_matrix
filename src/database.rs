@@ -1,6 +1,6 @@
 use crate::{matrix::DayMatrix, task::Task};
 use chrono::NaiveDate;
-use rusqlite::{fallible_iterator::FallibleIterator, Connection, Result};
+use rusqlite::{Connection, Result, fallible_iterator::FallibleIterator};
 
 pub struct Table {
     connection: Connection,
@@ -13,7 +13,9 @@ impl Table {
     }
 
     pub fn at_storage(path: &str) -> Table {
-        Table { connection: Connection::open(path).expect("failed to open database") }
+        Table {
+            connection: Connection::open(path).expect("failed to open database"),
+        }
     }
     pub fn create_table(&self) {
         // Dates separated by an _
@@ -55,13 +57,29 @@ impl Table {
 
     pub fn get_all_tasks(&self) -> Vec<Task> {
         let mut statement = self.connection.prepare("SELECT * from task").unwrap();
-        statement.query([]).unwrap().map(|row| Ok(Task::from(row))).unwrap().collect()
+        statement
+            .query([])
+            .unwrap()
+            .map(|row| Ok(Task::from(row)))
+            .unwrap()
+            .collect()
     }
-    
+
     pub fn get_tasks_from_day(&self, date: NaiveDate) -> DayMatrix {
         let str_date = date.to_string();
-        let mut statement = self.connection.prepare(&format!("SELECT * from task WHERE dates LIKE '%{}%'", str_date)).unwrap();
-        let tasks = statement.query([]).unwrap().map(|row| Ok(Task::from(row))).unwrap().collect();
+        let mut statement = self
+            .connection
+            .prepare(&format!(
+                "SELECT * from task WHERE dates LIKE '%{}%'",
+                str_date
+            ))
+            .unwrap();
+        let tasks = statement
+            .query([])
+            .unwrap()
+            .map(|row| Ok(Task::from(row)))
+            .unwrap()
+            .collect();
 
         DayMatrix::new(date, tasks)
     }

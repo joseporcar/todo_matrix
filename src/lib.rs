@@ -1,7 +1,7 @@
 mod database;
 mod graphics;
-mod task;
 mod matrix;
+mod task;
 
 use std::str::FromStr;
 
@@ -22,5 +22,5 @@ pub fn testing() {
     conn.clear_table();
     conn.create_table();
     conn.add_task(task).unwrap();
-    println!("{:?}",conn.get_tasks_from_day(dates))
+    println!("{:?}", conn.get_tasks_from_day(dates))
 }

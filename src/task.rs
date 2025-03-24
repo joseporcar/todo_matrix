@@ -23,7 +23,7 @@ pub struct Task {
 impl Task {
     pub fn new(
         content: String,
-        complete: Completeness, 
+        complete: Completeness,
         dates: Vec<NaiveDate>,
         importance: Importance,
         urgency: Urgency,
@@ -37,8 +37,18 @@ impl Task {
             urgency,
         }
     }
-    pub fn from_sql(id: u32, dates: String, content: String, complete: Completeness, importance: Importance, urgency: Urgency) -> Task {
-        let dates = dates.split("_").map(|date| NaiveDate::from_str(date).unwrap()).collect();
+    pub fn from_sql(
+        id: u32,
+        dates: String,
+        content: String,
+        complete: Completeness,
+        importance: Importance,
+        urgency: Urgency,
+    ) -> Task {
+        let dates = dates
+            .split("_")
+            .map(|date| NaiveDate::from_str(date).unwrap())
+            .collect();
 
         Task {
             id: Uploaded::Uploaded(id),
@@ -46,7 +56,7 @@ impl Task {
             dates,
             complete,
             importance,
-            urgency
+            urgency,
         }
     }
     pub fn set_id(&mut self, id: u32) {
@@ -86,18 +96,22 @@ impl Task {
 
 impl From<&Row<'_>> for Task {
     fn from(value: &Row) -> Self {
-        Task { id:Uploaded::Uploaded(value.get(0).unwrap()), 
-            dates: ugly_sql_dates_workaround(value.get(1).unwrap()), 
-            content: value.get(2).unwrap(), 
-            complete: value.get(3).unwrap(), 
-            importance: value.get(4).unwrap(), 
-            urgency: value.get(5).unwrap() 
+        Task {
+            id: Uploaded::Uploaded(value.get(0).unwrap()),
+            dates: ugly_sql_dates_workaround(value.get(1).unwrap()),
+            content: value.get(2).unwrap(),
+            complete: value.get(3).unwrap(),
+            importance: value.get(4).unwrap(),
+            urgency: value.get(5).unwrap(),
         }
     }
 }
 
 fn ugly_sql_dates_workaround(dates: String) -> Vec<NaiveDate> {
-    dates.split('_').map(|date| NaiveDate::from_str(date).unwrap()).collect()
+    dates
+        .split('_')
+        .map(|date| NaiveDate::from_str(date).unwrap())
+        .collect()
 }
 #[derive(Debug, Clone)]
 enum Uploaded {
