@@ -47,7 +47,7 @@ impl Table {
             ),
         )
     }
-    fn ugly_dates_sql_workaround(dates: &Vec<NaiveDate>) -> String {
+    fn ugly_dates_sql_workaround(dates: &[NaiveDate]) -> String {
         dates
             .iter()
             .map(|x| x.to_string())
