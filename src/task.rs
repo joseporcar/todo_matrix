@@ -74,6 +74,19 @@ impl Task {
     pub fn compare_urgency(&self, other: &Task) -> std::cmp::Ordering {
         self.urgency.cmp(&other.urgency)
     }
+    pub fn get_index_importance_urgency(&self) -> (i32, i32) {
+        (Self::get_index_helper(&self.importance), Self::get_index_helper(&self.urgency))
+    }
+    fn get_index_helper(element: &impl ToString) -> i32 {
+        match element.to_string().as_str() {
+            "High" => 5,
+            "MidHigh" => 4,
+            "Mid" => 3,
+            "MidLow" => 2,
+            "Low" => 1,
+            _ => -1,
+        }
+    }
     pub fn content(&self) -> &str {
         &self.content
     }
