@@ -40,8 +40,6 @@ fn main_box() -> gtk::Box {
         .orientation(Orientation::Vertical)
         .build();
     main_box.append(&top_bar());
-    // main_box.append(&center_box());
-    // main_box.append(&horizontal_labels());
     main_box.append(&matrix_grid());
     main_box
 }
