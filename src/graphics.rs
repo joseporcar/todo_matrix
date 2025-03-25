@@ -1,5 +1,8 @@
-use gtk::{self, Orientation, glib};
+use gtk::{self, glib, Label, Orientation};
 use gtk::{gdk, prelude::*};
+
+use crate::matrix::DayMatrix;
+use crate::task::Task;
 
 pub fn run_app(app_id: &str) -> glib::ExitCode {
     let app = build_app(app_id);
@@ -69,6 +72,12 @@ fn label_adder(grid: &mut gtk::Grid, position: gtk::PositionType) {
             }
         }
         _ => (),
+    }
+}
+
+fn grid_day_adder(grid: &mut gtk::Grid, matrix: DayMatrix) {
+    for (content, (importance, urgency)) in matrix.tasks().iter().map(|task| (task.content(), Task::get_index_importance_urgency(&task))) {
+        grid.attach(&Label::builder().label(content).build(), urgency, importance, 1, 1);
     }
 }
 
